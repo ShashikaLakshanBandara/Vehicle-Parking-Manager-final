@@ -126,7 +126,7 @@ namespace Vehicle_Parking_Manager_final_
         private void btnHelp_Click(object sender, EventArgs e)
         {
             ActivateButton(sender, RGBColors.color5);
-            OpenChildForm(new Forms.FormHelp());
+            //OpenChildForm(new Forms.FormHelp());
         }
 
         private void btnAbout_Click(object sender, EventArgs e)
@@ -188,12 +188,14 @@ namespace Vehicle_Parking_Manager_final_
 
         private void pictureBoxLogo_MouseHover(object sender, EventArgs e)
         {
-            pictureBoxLogo.Size = new System.Drawing.Size(125, 125);
+            Panel1Logo.FillColor = Color.FromArgb(10, 243, 255);
+            Panel1Logo.FillColor2 = Color.FromArgb(10, 243, 255);
         }
 
         private void pictureBoxLogo_MouseLeave(object sender, EventArgs e)
         {
-            pictureBoxLogo.Size = new System.Drawing.Size(115, 115);
+            Panel1Logo.FillColor = Color.FromArgb(48, 48, 70);
+            Panel1Logo.FillColor2 = Color.FromArgb(48, 48, 70);
         }
     }
 }

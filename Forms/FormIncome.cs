@@ -28,39 +28,47 @@ namespace Vehicle_Parking_Manager_final_.Forms
 
         private void guna2Button1_Click(object sender, EventArgs e)
         {
-            String totalVehicles;
-            double totalIncome = 0.0;
+            if (comboBox.Text == "")
+            {
+                MessageBox.Show("You must select a date!");
+            }
+            else
+            {
+                string totalVehicles;
+                double totalIncome = 0.0;
 
-            string date = comboBox.Text;
-            string dbPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            dbPath = Path.Combine(dbPath, "Vehicle Parking Manager", "Database1.db");
-            cn = new SQLiteConnection($@"URI=file:{dbPath}");
-            cn.Open();
-            string QUERY = $"SELECT license_plate_no, Entry_Time, Leaving_Time, Parking_Duration, Total_Charge FROM Parking_History WHERE Date = '{date}';";
-            SQLiteCommand CMD = new SQLiteCommand(QUERY, cn);
-            CMD.ExecuteNonQuery();
-            DataTable dt = new DataTable();
-            SQLiteDataAdapter da = new SQLiteDataAdapter(CMD);
-            da.Fill(dt);
-            DataGridView1.DataSource= dt;
+                string date = comboBox.Text;
+                string dbPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                dbPath = Path.Combine(dbPath, "Vehicle Parking Manager", "Database1.db");
+                cn = new SQLiteConnection($@"URI=file:{dbPath}");
+                cn.Open();
+                string QUERY = $"SELECT license_plate_no, Entry_Time, Leaving_Time, Parking_Duration, Total_Charge FROM Parking_History WHERE Date = '{date}';";
+                SQLiteCommand CMD = new SQLiteCommand(QUERY, cn);
+                CMD.ExecuteNonQuery();
+                DataTable dt = new DataTable();
+                SQLiteDataAdapter da = new SQLiteDataAdapter(CMD);
+                da.Fill(dt);
+                DataGridView1.DataSource = dt;
 
-            QUERY = $"SELECT COUNT(Date) FROM Parking_History WHERE Date='{date}';";
-            CMD = new SQLiteCommand(QUERY, cn);
-            CMD.ExecuteNonQuery();
-            totalVehicles = (CMD.ExecuteScalar()).ToString();
-            label4.Text = totalVehicles;
+                QUERY = $"SELECT COUNT(Date) FROM Parking_History WHERE Date='{date}';";
+                CMD = new SQLiteCommand(QUERY, cn);
+                CMD.ExecuteNonQuery();
+                totalVehicles = (CMD.ExecuteScalar()).ToString();
+                label4.Text = totalVehicles;
 
-            cmd = new SQLiteCommand("Select currency from settings where Id = " + 1, cn);
-            da = new SQLiteDataAdapter(cmd);
-            DataTable dt2 = new DataTable();
-            da.Fill(dt2);
-            string currency = string.Join(Environment.NewLine, dt2.Rows.OfType<DataRow>().Select(x => string.Join(" ; ", x.ItemArray)));
+                cmd = new SQLiteCommand("Select currency from settings where Id = " + 1, cn);
+                da = new SQLiteDataAdapter(cmd);
+                DataTable dt2 = new DataTable();
+                da.Fill(dt2);
+                string currency = string.Join(Environment.NewLine, dt2.Rows.OfType<DataRow>().Select(x => string.Join(" ; ", x.ItemArray)));
 
-            QUERY = $"SELECT SUM(Total_Charge) FROM Parking_History WHERE Date='{date}';";
-            CMD = new SQLiteCommand(QUERY, cn);
-            CMD.ExecuteNonQuery();
-            totalIncome = Convert.ToDouble(CMD.ExecuteScalar());
-            label5.Text = $"{currency} {totalIncome.ToString()}";
+                QUERY = $"SELECT SUM(Total_Charge) FROM Parking_History WHERE Date='{date}';";
+                CMD = new SQLiteCommand(QUERY, cn);
+                CMD.ExecuteNonQuery();
+                totalIncome = Convert.ToDouble(CMD.ExecuteScalar());
+                label5.Text = $"{currency} {totalIncome.ToString()}";
+            }
+            
         }
 
         private void FormIncome_Load(object sender, EventArgs e)
